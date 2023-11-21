@@ -1,3 +1,7 @@
+## Install
+```
+npm install --save https://github.com/magdsnail/node-modbus-stream.git
+```
 ## Modbus Stream
 
 [![Build Status](https://secure.travis-ci.org/node-modbus/stream.png?branch=master)](http://travis-ci.org/node-modbus/stream)
