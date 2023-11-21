@@ -1,13 +1,8 @@
-## Install
-```
-npm install --save https://github.com/magdsnail/node-modbus-stream.git
-```
 ## Modbus Stream
 
 [![Build Status](https://secure.travis-ci.org/node-modbus/stream.png?branch=master)](http://travis-ci.org/node-modbus/stream)
 [![Package Version](https://badge.fury.io/js/modbus-stream.svg)](https://npmjs.org/package/modbus-stream)
 [![Dependency Status](https://gemnasium.com/badges/github.com/node-modbus/stream.svg)](https://gemnasium.com/github.com/node-modbus/stream)
-
 
 This is a NodeJS module to help you process modbus data. It uses [pdu](https://github.com/node-modbus/pdu) to build the core PDU and then uses transports to extend the rest.
 
@@ -16,13 +11,13 @@ This is a NodeJS module to help you process modbus data. It uses [pdu](https://g
 - [x] Support almost every standard function code
 - [x] Support standard exceptions
 - [x] Support transports
-    - [x] TCP
-    - [x] RTU
-    - [x] ASCII
+  - [x] TCP
+  - [x] RTU
+  - [x] ASCII
 - [x] Support drivers
-    - [x] TCP
-    - [x] UDP
-    - [x] Serial (RS232, RS485)
+  - [x] TCP
+  - [x] UDP
+  - [x] Serial (RS232, RS485)
 
 ### Example
 
@@ -31,17 +26,19 @@ This is my current `test.js` file. It creates a client and a server network sock
 ```js
 var modbus = require("modbus-stream");
 
-modbus.tcp.server({ debug: "server" }, (connection) => {
+modbus.tcp
+  .server({ debug: "server" }, (connection) => {
     connection.readCoils({ from: 3, to: 7 }, (err, info) => {
-        console.log("response", info.response.data);
+      console.log("response", info.response.data);
     });
-}).listen(12345, () => {
+  })
+  .listen(12345, () => {
     modbus.tcp.connect(12345, { debug: "client" }, (err, connection) => {
-        connection.on("read-coils", (request, reply) => {
-            reply(null, [ 1, 0, 1, 0, 1, 1, 0, 1 ]);
-        });
+      connection.on("read-coils", (request, reply) => {
+        reply(null, [1, 0, 1, 0, 1, 1, 0, 1]);
+      });
     });
-});
+  });
 ```
 
 ## Usage
@@ -53,9 +50,14 @@ To connect to a modbus device over TCP, use:
 ```js
 var modbus = require("modbus-stream");
 
-modbus.tcp.connect(502, "134.2.56.231", { debug: "automaton-2454" }, (err, connection) => {
+modbus.tcp.connect(
+  502,
+  "134.2.56.231",
+  { debug: "automaton-2454" },
+  (err, connection) => {
     // do something with connection
-});
+  }
+);
 ```
 
 To listen for connections over TCP, use:
@@ -63,11 +65,13 @@ To listen for connections over TCP, use:
 ```js
 var modbus = require("modbus-stream");
 
-modbus.tcp.server({ debug: "server" }, (connection) => {
+modbus.tcp
+  .server({ debug: "server" }, (connection) => {
     // do something with connection
-}).listen(502, () => {
+  })
+  .listen(502, () => {
     // ready
-});
+  });
 ```
 
 To connecto to a modbus device over a serial port, use:
@@ -75,9 +79,13 @@ To connecto to a modbus device over a serial port, use:
 ```js
 var modbus = require("modbus-stream");
 
-modbus.serial.connect("/dev/ttyS123", { debug: "automaton-123" }, (err, connection) => {
+modbus.serial.connect(
+  "/dev/ttyS123",
+  { debug: "automaton-123" },
+  (err, connection) => {
     // do something with connection
-});
+  }
+);
 ```
 
 ### Requests
@@ -85,15 +93,19 @@ modbus.serial.connect("/dev/ttyS123", { debug: "automaton-123" }, (err, connecti
 After having a connection, you can send requests and listen for responses.
 
 ```js
-modbus.serial.connect("/dev/ttyS123", { debug: "automaton-123" }, (err, connection) => {
+modbus.serial.connect(
+  "/dev/ttyS123",
+  { debug: "automaton-123" },
+  (err, connection) => {
     if (err) throw err;
 
     connection.readCoils({ address: 52, quantity: 8 }, (err, res) => {
-        if (err) throw err;
+      if (err) throw err;
 
-        console.log(res); // response
-    })
-});
+      console.log(res); // response
+    });
+  }
+);
 ```
 
 Every method accepts and object `options` which have defaults parameters (like `address = 0`) and a callback, in case you want to see the response from the remote device. Here is a list of supported function codes and the corresponding methods:
@@ -138,23 +150,27 @@ to build the packets.
 To respond to remote requests, listen for events.
 
 ```js
-modbus.serial.connect("/dev/ttyS123", {
+modbus.serial.connect(
+  "/dev/ttyS123",
+  {
     // except "debug", everything else is the default for serial
-    baudRate : 9600,
-    dataBits : 8,
-    stopBits : 1,
-    parity   : "none",
-    debug    : "automaton-123"
-}, (err, connection) => {
+    baudRate: 9600,
+    dataBits: 8,
+    stopBits: 1,
+    parity: "none",
+    debug: "automaton-123",
+  },
+  (err, connection) => {
     if (err) throw err;
 
     connection.events.on("read-coils", (req, reply) => {
-        console.log(req); // request
+      console.log(req); // request
 
-        // ...
-        return reply(null, [ data ]);
-    })
-});
+      // ...
+      return reply(null, [data]);
+    });
+  }
+);
 ```
 
 ### Events
