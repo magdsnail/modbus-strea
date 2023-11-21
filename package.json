@@ -18,7 +18,7 @@
   "_requiredBy": [
     "/"
   ],
-  "_resolved": "git+https://github.com/magdsnail/node-modbus-stream.git#59d0c6fc5aeea90c42053df2ad8bdac66fe14b87",
+  "_resolved": "git+https://github.com/magdsnail/node-modbus-stream.git",
   "_spec": "modbus-stream@git+https://github.com/magdsnail/node-modbus-stream.git",
   "_where": "protocol_modbus",
   "author": {
